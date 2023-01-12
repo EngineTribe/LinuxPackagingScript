@@ -1,0 +1,23 @@
+pkgbase = smm-we
+	pkgdesc = A modified version of the original SMM:WE game made by Engine Kingdom Community, based on version 3.2.3 which only adds Course World.
+	pkgver = 3.3.0
+	pkgrel = 1
+	url = https://discord.gg/enginekingdom
+	arch = x86_64
+	license = custom
+	makedepends = p7zip
+	makedepends = icoextract
+	makedepends = imagemagick
+	depends = desktop-file-utils
+	depends = curl
+	depends = openssl-1.0
+	source = SMM_WE.exe::https://cdn.discordapp.com/attachments/1009217873534799973/1061483346871451758/SMM-WE-3.3.0.exe
+	source = smm-we.desktop
+	source = SMM_WE::https://github.com/YidaozhanYa/yoyogames-runner-bin/raw/main/runner_x64.1.3
+	source = discord-rpc-linux.zip::https://github.com/discord/discord-rpc/releases/download/v3.4.0/discord-rpc-linux.zip
+	sha256sums = d2ed9560d794532368a62be8f07efa26e39c78c575118de8a87e7d395d7c3303
+	sha256sums = da24426d1806aa26832e17efd78a83a65e366f151b100f224bcabea3258bb2ef
+	sha256sums = db9abdad400432ff7ad95271703a85c085f068639e21b32b4c156b1101993307
+	sha256sums = dac1f5dc6bedaeab1cc3c2c7fd4261e00838c81619c3ee325f3723c3d55ee03a
+
+pkgname = smm-we

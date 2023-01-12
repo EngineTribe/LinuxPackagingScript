@@ -1,0 +1,61 @@
+# Maintainer: YidaozhanYa <yidaozhan_ya@outlook.com>
+
+pkgname=smm-we
+pkgver=3.3.0
+pkgrel=1
+pkgdesc="A modified version of the original SMM:WE game made by Engine Kingdom Community, based on version 3.2.3 which only adds Course World."
+arch=('x86_64')
+url="https://discord.gg/enginekingdom"
+license=('custom')
+depends=('desktop-file-utils' 'curl' 'openssl-1.0')
+makedepends=('p7zip' 'icoextract' 'imagemagick')
+source=("SMM_WE.exe::https://cdn.discordapp.com/attachments/1009217873534799973/1061483346871451758/SMM-WE-3.3.0.exe"
+        "${pkgname}.desktop"
+        "SMM_WE::https://github.com/YidaozhanYa/yoyogames-runner-bin/raw/main/runner_x64.1.3"
+        "discord-rpc-linux.zip::https://github.com/discord/discord-rpc/releases/download/v3.4.0/discord-rpc-linux.zip")
+sha256sums=('d2ed9560d794532368a62be8f07efa26e39c78c575118de8a87e7d395d7c3303'
+            'da24426d1806aa26832e17efd78a83a65e366f151b100f224bcabea3258bb2ef'
+            'db9abdad400432ff7ad95271703a85c085f068639e21b32b4c156b1101993307'
+            'dac1f5dc6bedaeab1cc3c2c7fd4261e00838c81619c3ee325f3723c3d55ee03a')
+
+package() {
+  7z x "SMM_WE.exe" -o"${pkgdir}/usr/share/${pkgname}/assets"
+
+  #correct filesystem permissions
+  find "${pkgdir}" -type d -execdir chmod 755 {} +
+  find "${pkgdir}/usr/share/${pkgname}/assets" -type d -execdir chmod 644 {} +
+
+  pushd "${pkgdir}/usr/share/${pkgname}/assets"
+    mkdir ico
+    pushd ico
+      icoextract '../${SMM_WE}.exe' ./SMM_WE.ico
+      convert SMM_WE.ico SMM_WE.png
+      install -Dm0644 SMM_WE-8.png "${pkgdir}/usr/share/pixmaps/smm-we.png"
+    popd
+    rm -rf ico
+
+    rm -rf "\$PLUGINSDIR"
+    rm -rf "\$TEMP"
+    rm "\${SMM_WE}.exe"
+    rm "Uninstall.exe"
+    rm "D3DX9_43.dll"
+    mv "data.win" "game.unx"
+    install -Dm0644 "license.txt" "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+
+    mv "${srcdir}/discord-rpc/linux-dynamic/lib/libdiscord-rpc.so" ./libdiscord-rpc.so
+    rm discord-rpc{,-main}.dll
+
+    for SRC in *.ogg; do
+        DST="$(printf "${SRC}" | tr '[A-Z]' '[a-z]')"
+        if [ "${SRC}" != "${DST}" ]; then
+            [ ! -e "${DST}" ] && mv -T "${SRC}" "${DST}"
+        fi
+    done
+  popd
+
+  install -Dm0755 SMM_WE "${pkgdir}/usr/share/${pkgname}/SMM_WE"
+  mkdir "${pkgdir}/usr/bin"
+  ln -s "${pkgdir}/usr/share/${pkgname}/SMM_WE" "${pkgdir}/usr/bin/smm-we"
+  install -Dm0644 ${pkgname}.desktop "${pkgdir}/usr/share/applications/${pkgname}.desktop"
+}
+

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=Super Mario Maker: World Engine
+GenericName=SMM:WE
+Comment=SMM:WE
+Encoding=UTF-8
+Version=1.0
+Type=Application
+Terminal=false
+Icon=smm-we
+Exec=smm-we %F
+Categories=Game;
+StartupWMClass=smm-we
+
